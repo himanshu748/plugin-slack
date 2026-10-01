@@ -220,6 +220,26 @@ public class FakeWebhookController {
     public HttpResponse<?> mockPost(HttpRequest<?> request, String method, @Body String data) {
         FakeWebhookController.data = data;
 
+        if (method.equals("views.open") || method.equals("views.publish")) {
+            if (
+                (method.equals("views.open") && data.contains("trigger_id=force_error"))
+                    || (method.equals("views.publish") && data.contains("user_id=force_error"))
+            ) {
+                return HttpResponse.ok(convertToSlack(Map.of("ok", false, "error", "invalid_view")));
+            }
+            return HttpResponse.ok(
+                convertToSlack(
+                    Map.of(
+                        "ok", true,
+                        "view", Map.of(
+                            "id", "V1234567890",
+                            "hash", "hash123"
+                        )
+                    )
+                )
+            );
+        }
+
         // Mock canvas method responses
         if (method.contains("canvases")) {
             if (method.contains("create") && !method.contains("conversations")) {
