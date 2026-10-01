@@ -56,7 +56,9 @@ import reactor.core.publisher.Mono;
     title = "Trigger flows from Slack Events API",
     description = "Exposes a webhook compatible with Slack Event Subscriptions and slash/interactive payloads to start a Flow execution. " +
         "Validates requests with your app signing secret and uses the bot token to decrypt the incoming context. " +
-        "Configure Slack to send the events you want to this trigger URL; unsupported paths return 404."
+        "Configure Slack to send the events you want to this trigger URL; unsupported paths return 404. " +
+        "For the examples below, generate a random webhook key once and store it as the `SLACK_WEBHOOK_KEY` secret. " +
+        "Keep this key stable and use the resulting webhook URL as your Slack app's Request URL."
 )
 @Plugin(
     examples = {
@@ -69,6 +71,7 @@ import reactor.core.publisher.Mono;
                 triggers:
                   - id: slack_event
                     type: io.kestra.plugin.slack.app.core.Trigger
+                    key: "{{ secret('SLACK_WEBHOOK_KEY') }}"
                     botToken: "{{ secret('SLACK_BOT_TOKEN') }}"
                     signingSecret: "{{ secret('SLACK_SIGNING_SECRET') }}"
                     conditions:
@@ -92,6 +95,7 @@ import reactor.core.publisher.Mono;
                 triggers:
                   - id: slack_mention
                     type: io.kestra.plugin.slack.app.core.Trigger
+                    key: "{{ secret('SLACK_WEBHOOK_KEY') }}"
                     botToken: "{{ secret('SLACK_BOT_TOKEN') }}"
                     signingSecret: "{{ secret('SLACK_SIGNING_SECRET') }}"
 
