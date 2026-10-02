@@ -57,8 +57,12 @@ import reactor.core.publisher.Mono;
     description = "Exposes a webhook compatible with Slack Event Subscriptions and slash/interactive payloads to start a Flow execution. " +
         "Validates requests with your app signing secret and uses the bot token to decrypt the incoming context. " +
         "Configure Slack to send the events you want to this trigger URL; unsupported paths return 404. " +
-        "For the examples below, generate a random webhook key once and store it as the `SLACK_WEBHOOK_KEY` secret. " +
-        "Keep this key stable and use the resulting webhook URL as your Slack app's Request URL."
+        "For the examples below, generate a random webhook key once (for example, with `openssl rand -hex 32`) " +
+        "and store it as the `SLACK_WEBHOOK_KEY` secret. Use URL-safe alphanumeric characters and at most 256 characters. " +
+        "In Open Source, provide its base64-encoded value through the `SECRET_SLACK_WEBHOOK_KEY` environment variable " +
+        "on the Kestra server; see [Secrets](https://kestra.io/docs/concepts/secret) for setup instructions. " +
+        "Keep this key stable and use the resulting webhook URL as your Slack app's Request URL. " +
+        "Keep the URL private: it contains the key. Slack request signatures are verified separately with `signingSecret`."
 )
 @Plugin(
     examples = {
