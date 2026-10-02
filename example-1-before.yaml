@@ -1,0 +1,17 @@
+id: slack_message_trigger
+namespace: company.team
+
+triggers:
+  - id: slack_event
+    type: io.kestra.plugin.slack.app.core.Trigger
+    botToken: "{{ secret('SLACK_BOT_TOKEN') }}"
+    signingSecret: "{{ secret('SLACK_SIGNING_SECRET') }}"
+    conditions:
+      - type: io.kestra.plugin.core.condition.ExecutionFlowCondition
+        namespace: company.team
+        flowId: slack_message_trigger
+
+tasks:
+  - id: log_event
+    type: io.kestra.plugin.core.log.Log
+    message: "Received Slack event: {{ trigger.body }}"
